@@ -29,14 +29,15 @@ io.on('connection',(socket) => {
 //    createdAt:123
 //});
    
-socket.on('createMessage',(res) => {
+socket.on('createMessage',(res,callback) => {
     console.log('User message ',res);
 //    io.emit('newMessage',{
 //        from:res.from,
 //        text:res.text,
 //        createdAt:new Date().getTime()
 //    });
-    socket.broadcast.emit('newMessage',generateMessage(res.from,res.text));
+    io.emit('newMessage',generateMessage(res.from,res.text));
+    callback('This is from server.');
 });    
 //listens to emitted event by client 
 //socket.on('createEmail',(newEmail) => {
