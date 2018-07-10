@@ -39,6 +39,9 @@ socket.on('createMessage',(res,callback) => {
     io.emit('newMessage',generateMessage(res.from,res.text));
     callback('This is from server.');
 });    
+    socket.on('createLocationMessage', (coords) => {
+        io.emit('newMessage',generateMessage('Admin',`${coords.latitude},${coords.longitude}`));
+    })
 //listens to emitted event by client 
 //socket.on('createEmail',(newEmail) => {
 //   console.log('createEmail ',newEmail); 
