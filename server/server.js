@@ -25,18 +25,19 @@ socket.emit('newEmail', {
     text:'Hey there!',
     createdAt:123
 });
-socket.emit('createMessage',{
-   from:'User1',
-    text:'What are you all doing?',
-    createdAt:123
-});    
-socket.on('newMessage',(res) => {
+   
+socket.on('createMessage',(res) => {
     console.log('User message ',res);
+    io.emit('newMessage',{
+        from:res.from,
+        text:res.text,
+        createdAt:new Date().getTime()
+    });
 });    
 //listens to emitted event by client 
-socket.on('createEmail',(newEmail) => {
-   console.log('createEmail ',newEmail); 
-});   
+//socket.on('createEmail',(newEmail) => {
+//   console.log('createEmail ',newEmail); 
+//});   //socket.emit emits to single connection while io.emit emits to all
 //listens to disconnect event
 socket.on('disconnect',() => {
    console.log('Disconnected from user'); 
