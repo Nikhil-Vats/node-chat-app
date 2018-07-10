@@ -23,8 +23,16 @@ io.on('connection',(socket) => {
 socket.emit('newEmail', {
     from:'abc@example.com',
     text:'Hey there!',
-    createAt:123
+    createdAt:123
 });
+socket.emit('createMessage',{
+   from:'User1',
+    text:'What are you all doing?',
+    createdAt:123
+});    
+socket.on('newMessage',(res) => {
+    console.log('User message ',res);
+});    
 //listens to emitted event by client 
 socket.on('createEmail',(newEmail) => {
    console.log('createEmail ',newEmail); 
