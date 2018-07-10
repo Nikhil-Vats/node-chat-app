@@ -1,6 +1,8 @@
 const path = require('path');
-
+const http = require('http');
+const socketIO = require('socket.io');
 const express = require('express');
+
 
 const publicPath = path.join(__dirname,'../public');
 const port = process.env.PORT ||3000;
@@ -9,9 +11,19 @@ const port = process.env.PORT ||3000;
 //console.log(publicPath);
 
 var app = express();
-
+var server = http.createServer(app);
+var io = socketIO(server);
+//we will use io to communicate between user and client
 app.use(express.static(publicPath));
 
-app.listen(port,() => {
-    console.log(`Server is up on ${port} 3000`);
+//listens for a new client connection and lets us does something on that
+io.on('connection',(socket) => {
+    console.log('New user connected');
+//listens to disconnect event
+socket.on('disconnect',() => {
+   console.log('Disconnected from user'); 
+});
+});
+server.listen(port,() => {
+    console.log(`Server is up on ${port}.`);
 });
