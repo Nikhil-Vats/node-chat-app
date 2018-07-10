@@ -19,20 +19,35 @@ app.use(express.static(publicPath));
 //listens for a new client connection and lets us does something on that
 io.on('connection',(socket) => {
     console.log('New user connected');
+    socket.emit('newMessage',{
+       from:'Admin',
+        text:'Welcome to chat app',
+        createdAt: new Date().getTime()
+    });
+    socket.broadcast.emit('newMessage',{
+        from:'Admin',
+        text:'new user joined',
+        createdAt: new Date().getTime()
+    })
 //emits to client side
-socket.emit('newEmail', {
-    from:'abc@example.com',
-    text:'Hey there!',
-    createdAt:123
-});
+//socket.emit('newEmail', {
+//    from:'abc@example.com',
+//    text:'Hey there!',
+//    createdAt:123
+//});
    
 socket.on('createMessage',(res) => {
     console.log('User message ',res);
-    io.emit('newMessage',{
-        from:res.from,
-        text:res.text,
-        createdAt:new Date().getTime()
-    });
+//    io.emit('newMessage',{
+//        from:res.from,
+//        text:res.text,
+//        createdAt:new Date().getTime()
+//    });
+//    socket.broadcast.emit('newMessage', {
+//        from:res.from,
+//        text:res.text,
+//        createdAt:new Date().getTime()
+//    });
 });    
 //listens to emitted event by client 
 //socket.on('createEmail',(newEmail) => {
@@ -46,3 +61,5 @@ socket.on('disconnect',() => {
 server.listen(port,() => {
     console.log(`Server is up on ${port}.`);
 });
+
+//broadcasting is emitting an event to everybody except one 
