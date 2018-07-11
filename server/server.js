@@ -2,7 +2,7 @@ const path = require('path');
 const http = require('http');
 const socketIO = require('socket.io');
 const express = require('express');
-const {generateMessage} = require('./utils/message');
+const {generateMessage,generateLocationMessage} = require('./utils/message');
 
 const publicPath = path.join(__dirname,'../public');
 const port = process.env.PORT ||3000;
@@ -40,7 +40,7 @@ socket.on('createMessage',(res,callback) => {
     callback('This is from server.');
 });    
     socket.on('createLocationMessage', (coords) => {
-        io.emit('newMessage',generateMessage('Admin',`${coords.latitude},${coords.longitude}`));
+        io.emit('newLocationMessage',generateLocationMessage('Admin',coords.latitude,coords.longitude));
     })
 //listens to emitted event by client 
 //socket.on('createEmail',(newEmail) => {
