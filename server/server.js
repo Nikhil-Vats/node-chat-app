@@ -37,7 +37,7 @@ socket.on('createMessage',(res,callback) => {
 //        createdAt:new Date().getTime()
 //    });
     io.emit('newMessage',generateMessage(res.from,res.text));
-    callback('This is from server.');
+    callback();
 });    
     socket.on('createLocationMessage', (coords) => {
         io.emit('newLocationMessage',generateLocationMessage('Admin',coords.latitude,coords.longitude));
