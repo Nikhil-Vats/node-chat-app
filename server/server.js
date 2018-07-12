@@ -49,18 +49,23 @@ io.on('connection',(socket) => {
 //});
    
 socket.on('createMessage',(res,callback) => {
-    console.log('Create message ',res);
+    var user = users.getUser(socket.id);
+    if(user && isRealString(res.text)) {
+        io.to(user.room).emit('newMessage',generateMessage(user.name,res.text));  
+    }
 //    io.emit('newMessage',{
 //        from:res.from,
 //        text:res.text,
 //        createdAt:new Date().getTime()
 //    });
-    io.emit('newMessage',generateMessage(res.from,res.text));
+  
     callback();
 });    
     socket.on('createLocationMessage', (coords) => {
-        io.emit('newLocationMessage',generateLocationMessage('Admin',coords.latitude,coords.longitude));
-    })
+       var user = users.getUser(socket.id); 
+      if(user) {  io.to(user.room).emit('newLocationMessage',generateLocationMessage(user.name,coords.latitude,coords.longitude));
+    }
+    });
 //listens to emitted event by client 
 //socket.on('createEmail',(newEmail) => {
 //   console.log('createEmail ',newEmail); 
