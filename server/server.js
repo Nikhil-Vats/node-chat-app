@@ -20,14 +20,23 @@ app.use(express.static(publicPath));
 //listens for a new client connection and lets us does something on that
 io.on('connection',(socket) => {
     console.log('New user connected');
-    socket.emit('newMessage',generateMessage('Admin',"Welcome to chat app"));
-    socket.broadcast.emit('newMessage',generateMessage('Admin','New User joined'));
+   
     socket.on('join',(params,callback) => {
         if(!isRealString(params.name) || !isRealString(params.room)) {
             callback('Name and room name are required.');
         }
+        socket.join(params.room);
+    
+    //io.emit -> emits to all -> io.to() [for sending to people in same room]
+    //socket.broadcast.emit -> emits to all except current user -> socket.broadcast.emit.to() [for sending to people in same room]
+    //socket.emit -> except to the current user only
+    
+     socket.emit('newMessage',generateMessage('Admin',"Welcome to chat app"));
+    socket.broadcast.to(params.room).emit('newMessage',generateMessage('Admin',`${params.name} has joined`));
         callback();
     });
+    
+    
 //emits to client side
 //socket.emit('newEmail', {
 //    from:'abc@example.com',
